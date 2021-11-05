@@ -1,8 +1,9 @@
-package com.example.azurestorage.controller;
+package com.example.azurestorage.serviceA.controller;
 
-import com.example.azurestorage.service.QueueService;
+import com.example.azurestorage.serviceA.service.QueueService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class QueueController {
 
     @Autowired
+    @Qualifier("serviceA.queueService")
     QueueService queueService;
 
     @PostMapping("/insert")
