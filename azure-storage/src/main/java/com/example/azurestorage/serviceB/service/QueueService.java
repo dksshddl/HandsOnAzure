@@ -1,6 +1,5 @@
 package com.example.azurestorage.serviceB.service;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +9,6 @@ import com.azure.storage.queue.models.QueueMessageItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

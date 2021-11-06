@@ -1,16 +1,6 @@
 package com.example.azurestorage.serviceA.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
-import java.util.Base64;
 import java.util.List;
-import java.util.Base64.Decoder;
 import java.util.stream.Collectors;
 
 import com.azure.core.credential.AzureSasCredential;
@@ -21,14 +11,9 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobItem;
-import com.azure.storage.blob.models.BlobListDetails;
-import com.azure.storage.blob.models.BlobProperties;
-import com.azure.storage.blob.models.ListBlobsOptions;
-import com.azure.storage.queue.models.QueueMessageItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -72,8 +57,61 @@ public class BlobService {
         BlobClient blobClient = containerClient.getBlobClient(blobName);
         
         BinaryData bin = blobClient.downloadContent();
-        Decoder decoder = Base64.getDecoder();
-
-        return new String(decoder.decode(bin.toBytes()));
+        
+        return new String(bin.toBytes());
 	}
+
+    public List<String> readBlobListByAccessKeyCredential(String containerName) {
+		
+		BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+			    .endpoint(blobEndpoint)
+			    .connectionString(accessKey)
+			    .buildClient();
+		
+		return readBlobList(blobServiceClient, containerName);		
+	}
+
+    public List<String> readBlobListBySasCredential(String containerName) {
+		
+		BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+			    .endpoint(blobEndpoint)
+                .credential(new AzureSasCredential(sasToken))
+			    .buildClient();
+		
+		return readBlobList(blobServiceClient, containerName);		
+	}
+
+    private List<String> readBlobList(BlobServiceClient blobServiceClient, String containerName) {
+        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
+
+        PagedIterable<BlobItem> blobClient = containerClient.listBlobs();
+
+        return blobClient.stream().map(item-> item.getName()).collect(Collectors.toList());
+	}
+
+    public String deleteBlobByAccessKeyCredential(String containerName, String blobName) {
+		
+		BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+			    .endpoint(blobEndpoint)
+			    .connectionString(accessKey)
+			    .buildClient();
+		
+		return deleteBlob(blobServiceClient, containerName, blobName);		
+	}
+
+    public String deleteBlobBySasCredential(String containerName, String blobName) {
+		
+		BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+			    .endpoint(blobEndpoint)
+                .credential(new AzureSasCredential(sasToken))
+			    .buildClient();
+		
+		return deleteBlob(blobServiceClient, containerName, blobName);		
+	}
+
+    private String deleteBlob(BlobServiceClient blobServiceClient, String containerName, String blobName) {
+        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
+        containerClient.getBlobClient(blobName).delete();
+        return blobName;
+    }
 }

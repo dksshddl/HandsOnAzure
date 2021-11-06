@@ -1,8 +1,5 @@
 package com.example.azurestorage.serviceB.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import com.azure.storage.blob.BlobClient;
