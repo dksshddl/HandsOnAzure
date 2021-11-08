@@ -7,10 +7,8 @@ sudo apt-get install -y openjdk-11-jdk maven
 
 #cd HandsOnAzure/azure-storage
 
-mvn clean install -DskipTests
-
-jar_file = target/*.jar
-java -jar ${jar_file}
+mvn clean install -DskipTests  # skip test
+java -jar target/*.jar
 
 # docker build -t handsonazure/azure-storage
 # docker run -p 8080:8080 handsonazure/azure-storage
