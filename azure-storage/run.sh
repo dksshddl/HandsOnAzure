@@ -3,9 +3,9 @@
 sudo apt-get update && sudo apt-get upgrade
 sudo apt-get install -y openjdk-11-jdk maven
 
-git clone https://github.com/dksshddl/HandsOnAzure.git
+#git clone https://github.com/dksshddl/HandsOnAzure.git
 
-cd HandsOnAzure/azure-storage
+#cd HandsOnAzure/azure-storage
 
 mvn clean install -DskipTests
 
