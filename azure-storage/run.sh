@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get update && sudo apt-get upgrade
+sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install -y openjdk-11-jdk maven
 
 #git clone https://github.com/dksshddl/HandsOnAzure.git
