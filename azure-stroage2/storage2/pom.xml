@@ -16,8 +16,13 @@
 	<properties>
 		<java.version>11</java.version>
 		<azure.version>3.10.0</azure.version>
+		<spring.cloud-version>2020.0.3</spring.cloud-version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -62,6 +67,13 @@
 				<groupId>com.azure.spring</groupId>
 				<artifactId>azure-spring-boot-bom</artifactId>
 				<version>${azure.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring.cloud-version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

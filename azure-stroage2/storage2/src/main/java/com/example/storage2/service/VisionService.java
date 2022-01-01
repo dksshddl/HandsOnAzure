@@ -13,8 +13,11 @@ import com.microsoft.azure.cognitiveservices.vision.customvision.prediction.Pred
 import com.microsoft.azure.cognitiveservices.vision.customvision.prediction.models.ClassifyImageOptionalParameter;
 import com.microsoft.azure.cognitiveservices.vision.customvision.prediction.models.ImagePrediction;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,18 +31,29 @@ public class VisionService {
 
     private final CustomVisionPredictionClient predictor = getPredictClient();
 
-    public PredictionVO predict(RequestVO vo) {
-        log.info("start prediction");
-        byte[] data = readImage(vo.getFileName());
-        ImagePrediction results = predictor.predictions()
-                                           .classifyImage(UUID.fromString(projectUUID), publishedName, data, null);
-        log.info("end prediction");
-                                        
-        return PredictionVO.builder()
-                           .predictions(results.predictions())
-                           .build();
+    @Autowired
+    private VisionClient visionClient;
 
+    public PredictionVO predictByUrl(RequestVO vo) {
+        return visionClient.predictionByUrl(vo);
     }
+
+    public PredictionVO predictByImage(String file) {
+        return visionClient.predictionByImage(file.getBytes());
+    }
+
+    // public PredictionVO predict(RequestVO vo) {
+    //     // log.info("start prediction...");
+    //     // byte[] data = readImage(vo.getFileName());
+    //     // ImagePrediction results = predictor.predictions()
+    //     //                                    .classifyImage(UUID.fromString(projectUUID), publishedName, data, null);
+    //     // log.info("end prediction...");
+                                        
+    //     // return PredictionVO.builder()
+    //     //                    .predictions(results.predictions())
+    //     //                    .build();
+
+    // }
 
     private byte[] readImage(String fileName) {
         try {
