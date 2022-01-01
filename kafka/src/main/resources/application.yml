@@ -1,0 +1,17 @@
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: dksshddl.servicebus.windows.net:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: com.example.kafka.domain.EmailSerializer
+    consumer:
+      bootstrap-servers: dksshddl.servicebus.windows.net:9093
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: com.example.kafka.domain.EmailDeserializer
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://dksshddl.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=NZM7HsZWxXgY8uWUhzoPyZF3VffExWs+q01pI9nPLXI=";
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+
+feign:
+  url: https://prod-02.northcentralus.logic.azure.com:443/workflows/f349d7f266b2479c82c331eddb435c8e/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WvKR2gqiJfXiV0vrR1_7cVVv9F4rUUy_jK883kaMmYI
