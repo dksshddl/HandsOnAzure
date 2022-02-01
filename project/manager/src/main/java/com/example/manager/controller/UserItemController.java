@@ -1,9 +1,14 @@
 package com.example.manager.controller;
 
-import com.example.manager.domain.item.ItemInfo;
+import com.example.manager.domain.item.ItemVO;
 import com.example.manager.service.UserItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -11,29 +16,44 @@ public class UserItemController extends AbstractV1UserController {
 
     private final UserItemService userItemService;
 
-    @PostMapping("/item/{userId}/like")
-    public void addLikeItem(@PathVariable("userId") String userId,
-                            @RequestBody ItemInfo iteminfo) {
-        userItemService.addLikeItem(userId, iteminfo);
+    @GetMapping("/item/{userId}/like")
+    public ResponseEntity<Mono<List<ItemVO>>> getLikeItem(@PathVariable("userId") String userId) {
+        Mono<List<ItemVO>> likeItem = userItemService.getLikeItem(userId);
+        return new ResponseEntity<>(likeItem, HttpStatus.OK);
     }
 
-    @DeleteMapping("/item/{userId}/like")
-    public void deleteLikeItem(@PathVariable("userId") String userId,
-                         @RequestParam String category,
-                         @RequestParam String id) {
-        userItemService.deleteLikeItem(userId, category, id);
+    @PostMapping("/item/{userId}/like/{itemId}")
+    public ResponseEntity<Object> addLikeItem(@PathVariable("userId") String userId,
+                                        @PathVariable("itemId") String itemId) {
+        userItemService.addLikeItem(userId, itemId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/item/{userId}/hate")
-    public void addHateItem(@PathVariable("userId") String userId,
-                            @RequestBody ItemInfo iteminfo) {
-        userItemService.addHateItem(userId, iteminfo);
+    @DeleteMapping("/item/{userId}/like/{itemId}")
+    public ResponseEntity<Object> deleteLikeItem(@PathVariable("userId") String userId,
+                                                 @PathVariable("itemId") String itemId) {
+
+        userItemService.deleteLikeItem(userId, itemId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/item/{userId}/hate")
-    public void deleteHateItem(@PathVariable("userId") String userId,
-                               @RequestParam String category,
-                               @RequestParam String id) {
-        userItemService.deleteHateItem(userId, category, id);
+    @GetMapping("/item/{userId}/hate")
+    public ResponseEntity<Mono<List<ItemVO>>> getHateItem(@PathVariable("userId") String userId) {
+        Mono<List<ItemVO>> hateItem = userItemService.getHateItem(userId);
+        return new ResponseEntity<>(hateItem, HttpStatus.OK);
+    }
+
+    @PostMapping("/item/{userId}/hate/{itemId}")
+    public ResponseEntity<Object> addHateItem(@PathVariable("userId") String userId,
+                                              @PathVariable("itemId") String itemId) {
+        userItemService.addHateItem(userId, itemId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/item/{userId}/hate/{itemId}")
+    public ResponseEntity<Object> deleteHateItem(@PathVariable("userId") String userId,
+                                                 @PathVariable("itemId") String itemId) {
+        userItemService.deleteHateItem(userId, itemId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
