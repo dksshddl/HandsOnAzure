@@ -1,10 +1,11 @@
 package com.example.manager.controller;
 
+import com.example.manager.domain.concern.ConcernVO;
 import com.example.manager.service.UserConcernService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -12,12 +13,14 @@ public class UserConcernController extends AbstractV1UserController {
     private final UserConcernService userConcernService;
 
     @GetMapping("/concern/{userId}")
-    public void addConcern(@PathVariable String userId, @RequestParam("category") List<String> category) {
+    public ResponseEntity<Object> addConcern(@PathVariable String userId, @RequestBody ConcernVO category) {
         userConcernService.addConcern(userId, category);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/concern/{userId}")
-    public void deleteConcern(@PathVariable String userId, @RequestParam("category") List<String> category) {
+    public ResponseEntity<Object> deleteConcern(@PathVariable String userId, @RequestBody ConcernVO category) {
         userConcernService.deleteConcern(userId, category);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

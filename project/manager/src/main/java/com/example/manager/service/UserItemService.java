@@ -1,6 +1,6 @@
 package com.example.manager.service;
 
-import com.example.manager.domain.ItemInfo;
+import com.example.manager.domain.item.ItemInfo;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,6 @@
 package com.example.manager.controller;
 
-import com.example.manager.domain.ItemInfo;
+import com.example.manager.domain.item.ItemInfo;
 import com.example.manager.service.UserItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
