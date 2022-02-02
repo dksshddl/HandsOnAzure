@@ -1,10 +1,21 @@
 package com.example.generator.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Advertisement {
-    private String itemCategory;
+    private String id;
+    private String categoryEn;
+    private String categoryKo;
     private String itemLink;
-    private String itemName;
-    private String itemPrice;
+    private String name;
+    private String price;
 
     private String imgLink;
 }

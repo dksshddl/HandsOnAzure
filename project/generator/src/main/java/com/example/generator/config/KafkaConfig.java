@@ -1,9 +1,8 @@
 package com.example.generator.config;
 
 import com.example.generator.domain.Advertisement;
-import com.example.kafka.domain.Email;
-import com.example.kafka.domain.EmailDeserializer;
-import com.example.kafka.domain.EmailSerializer;
+import com.example.generator.domain.AdvertisementDeserializer;
+import com.example.generator.domain.AdvertisementSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -31,7 +30,7 @@ public class KafkaConfig {
     public ConsumerFactory<String, Advertisement> consumer() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EmailDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, AdvertisementDeserializer.class);
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "dksshddl.servicebus.windows.net:9093");
         ConsumerFactory<String, Advertisement> consumerFactory = new DefaultKafkaConsumerFactory<>(props);
         consumerFactory.updateConfigs(kafkaSecurity());
@@ -42,7 +41,7 @@ public class KafkaConfig {
     public ProducerFactory<String, Advertisement> producer() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EmailSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, AdvertisementSerializer.class);
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "dksshddl.servicebus.windows.net:9093");
         props.put(ProducerConfig.LINGER_MS_CONFIG, 3);
         ProducerFactory<String, Advertisement> producerFactory = new DefaultKafkaProducerFactory<>(props);
