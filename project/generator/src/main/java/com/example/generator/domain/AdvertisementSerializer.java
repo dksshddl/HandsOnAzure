@@ -9,7 +9,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 @Slf4j
-public class AdvertisementSerializer implements Serializer<Email> {
+public class AdvertisementSerializer implements Serializer<Advertisement> {
 
     private final ObjectMapper objMapper = new ObjectMapper();
 
@@ -19,16 +19,16 @@ public class AdvertisementSerializer implements Serializer<Email> {
     }
 
     @Override
-    public byte[] serialize(String topic, Email data) {
+    public byte[] serialize(String topic, Advertisement data) {
         try {
             if (data == null) {
-                log.warn("EmailSerializer get null data with topic={}", topic);
+                log.warn("AdvertisementSerializer get null data with topic={}", topic);
                 return null;
             }
             return objMapper.writeValueAsBytes(data);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new SerializationException("EmailSerializer fail to serializing Email to byte array");
+            throw new SerializationException("AdvertisementSerializer fail to serializing Advertisement to byte array");
         }
     }
 

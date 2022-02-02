@@ -9,6 +9,8 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class KafkaService {
@@ -16,7 +18,7 @@ public class KafkaService {
     @Autowired
     private KafkaTemplate<String, Advertisement> kafkaTemplate;
 
-    @Value("${}") // TODO TOPIC variable 추가
+    @Value("${project.kafka.topic}")
     private String topic;
 
     public String insert(Advertisement data) {
@@ -25,4 +27,5 @@ public class KafkaService {
                 errCallback -> log.error("[producer] errorCallback. msg: " + errCallback.getMessage()));
         return "success";
     }
+
 }

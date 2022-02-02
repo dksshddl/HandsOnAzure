@@ -1,0 +1,24 @@
+project:
+  kafka:
+    topic: advertisement
+
+server:
+  port: 8081
+
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: adgeneventhub.servicebus.windows.net:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: com.example.generator.domain.AdvertisementSerializer
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://adgeneventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=aXr6vv5GvxI+hQAW8lyVtSGoCLblcun9mV4hk83NlGc=";
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+
+azure:
+  storage:
+    account-name: adgenstorage
+    account-key: u2o5cMTKQIYQewqDFe/H52ovGJhz3KdGpP0ET70Zn1ky1ozreGJoBA6w30C6k8q+QPeJNEpKpmJmfrWWJKIFPg==
+    blob-endpoint: https://adgenstorage.blob.core.windows.net/advertisement
+    data-table-conn-str: DefaultEndpointsProtocol=https;AccountName=adgenstorage;AccountKey=u2o5cMTKQIYQewqDFe/H52ovGJhz3KdGpP0ET70Zn1ky1ozreGJoBA6w30C6k8q+QPeJNEpKpmJmfrWWJKIFPg==;EndpointSuffix=core.windows.net

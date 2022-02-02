@@ -24,7 +24,9 @@ ext {
 
 dependencies {
 	implementation 'com.azure.spring:azure-spring-boot-starter-storage'
+	implementation 'com.azure:azure-data-tables:12.1.5'
 	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.projectlombok:lombok:1.18.22'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
