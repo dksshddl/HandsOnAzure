@@ -1,0 +1,19 @@
+services:
+  manager:
+    image: manager:latest
+    container_name: "manager"
+    working_dir: "/manager"
+    ports:
+      - 8080:8080
+  generator:
+    image: generator:latest
+    container_name: "generator"
+    working_dir: "/generator"
+    ports:
+      - 8081:8081
+  mail-sender:
+    image: mail-sender:latest
+    container_name: "mail-sender"
+    working_dir: "/mail-sender"
+    ports:
+      - 8082:8082
