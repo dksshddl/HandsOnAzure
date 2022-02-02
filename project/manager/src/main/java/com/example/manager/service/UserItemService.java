@@ -1,5 +1,6 @@
 package com.example.manager.service;
 
+import com.example.manager.domain.item.ItemListVO;
 import com.example.manager.domain.item.ItemType;
 import com.example.manager.domain.item.ItemVO;
 import com.example.manager.repository.UserItemRepository;
@@ -31,11 +32,18 @@ public class UserItemService {
         userItemRepository.delete(userId, itemId, ItemType.HATE);
     }
 
-    public Mono<List<ItemVO>> getLikeItem(String userId) {
-        return Mono.fromCallable(() -> userItemRepository.findAll(userId, ItemType.LIKE));
+    public Mono<ItemListVO> getLikeItem(String userId) {
+        return Mono.fromCallable(() -> {
+            List<ItemVO> itemVOList = userItemRepository.findAll(userId, ItemType.LIKE);
+            return ItemListVO.builder().itemVOList(itemVOList).count(itemVOList.size()).build();
+        });
     }
 
-    public Mono<List<ItemVO>> getHateItem(String userId) {
-        return Mono.fromCallable(() -> userItemRepository.findAll(userId, ItemType.HATE));
+    public Mono<ItemListVO> getHateItem(String userId) {
+
+        return Mono.fromCallable(() -> {
+            List<ItemVO> itemVOList = userItemRepository.findAll(userId, ItemType.LIKE);
+            return ItemListVO.builder().itemVOList(itemVOList).count(itemVOList.size()).build();
+        });
     }
 }

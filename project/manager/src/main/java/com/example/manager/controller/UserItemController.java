@@ -1,5 +1,6 @@
 package com.example.manager.controller;
 
+import com.example.manager.domain.item.ItemListVO;
 import com.example.manager.domain.item.ItemVO;
 import com.example.manager.service.UserItemService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,9 @@ public class UserItemController extends AbstractV1UserController {
     private final UserItemService userItemService;
 
     @GetMapping("/item/{userId}/like")
-    public ResponseEntity<Mono<List<ItemVO>>> getLikeItem(@PathVariable("userId") String userId) {
-        Mono<List<ItemVO>> likeItem = userItemService.getLikeItem(userId);
+    public ResponseEntity<Mono<ItemListVO>> getLikeItem(@PathVariable("userId") String userId) {
+        Mono<ItemListVO> likeItem = userItemService.getLikeItem(userId);
+
         return new ResponseEntity<>(likeItem, HttpStatus.OK);
     }
 
@@ -38,8 +40,8 @@ public class UserItemController extends AbstractV1UserController {
     }
 
     @GetMapping("/item/{userId}/hate")
-    public ResponseEntity<Mono<List<ItemVO>>> getHateItem(@PathVariable("userId") String userId) {
-        Mono<List<ItemVO>> hateItem = userItemService.getHateItem(userId);
+    public ResponseEntity<Mono<ItemListVO>> getHateItem(@PathVariable("userId") String userId) {
+        Mono<ItemListVO> hateItem = userItemService.getHateItem(userId);
         return new ResponseEntity<>(hateItem, HttpStatus.OK);
     }
 
