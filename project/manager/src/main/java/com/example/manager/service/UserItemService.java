@@ -40,7 +40,6 @@ public class UserItemService {
     }
 
     public Mono<ItemListVO> getHateItem(String userId) {
-
         return Mono.fromCallable(() -> {
             List<ItemVO> itemVOList = userItemRepository.findAll(userId, ItemType.LIKE);
             return ItemListVO.builder().itemVOList(itemVOList).count(itemVOList.size()).build();
