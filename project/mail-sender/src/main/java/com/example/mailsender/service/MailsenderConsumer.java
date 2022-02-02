@@ -24,47 +24,45 @@ import java.util.List;
 @Service
 public class MailsenderConsumer {
 
-	@Autowired
-	LogicAppClient client;
-	
-	@Autowired
-	@Qualifier("userTableclient")
-    TableClient tableClient;
-    
     @Autowired
-	@Qualifier("consumerTableclient")
+    LogicAppClient client;
+
+    @Autowired
+    @Qualifier("userTableClient")
+    TableClient tableClient;
+
+    @Autowired
+    @Qualifier("consumerTableClient")
     TableClient concernClient;
-    
+
     @Value("${manager.url}")
     private String managerurl;
-    
+
     @KafkaListener(topics = "advertisement", groupId = "myGroup1")
     public void consume(Advertisement ad) {
-    	
-     	   	
-    	String filter = String.format("category eq '%s'",ad.getCategoryKo());
-        ListEntitiesOptions options = new ListEntitiesOptions().setFilter(filter);
-        concernClient.listEntities(options, null, null).stream().forEach((entity)-> {
-        	
-        	String category = (String) entity.getProperty("category");
-        	String userid = (String) entity.getProperty("PartitionKey");
-        	
-        	TableEntity userEntity = tableClient.getEntity("user", userid);
-        	String email = (String) userEntity.getProperty("emailAddr");
-        
-        	String like = String.format("%s/v1/api/tiem/%s/like/%s", managerurl, userid, ad.getId());
-        	String hate = String.format("%s/v1/api/tiem/%s/hate/%s", managerurl, userid, ad.getId());
-        	
-        	Email body = Email.builder().email_addr(email).hateLink(hate).likeLink(like).itemLink(ad.getItemLink()).itemCategory(ad.getCategoryKo()).itemName(ad.getName()).itemPrice(ad.getPrice()).imgLink(ad.getImgLink()).build();
-        	
-        	ResponseEntity <String>resp = client.sendMailApp(body);
 
-            if (resp.getStatusCodeValue() % 100 == 2) {
+        log.info("successfully get ad : " + ad.getId());
+
+        String filter = String.format("category eq '%s'", ad.getCategoryKo());
+        ListEntitiesOptions options = new ListEntitiesOptions().setFilter(filter);
+        concernClient.listEntities(options, null, null).stream().forEach((entity) -> {
+
+            String category = (String) entity.getProperty("category");
+            String userid = (String) entity.getProperty("PartitionKey");
+
+            TableEntity userEntity = tableClient.getEntity("user", userid);
+            String email = (String) userEntity.getProperty("emailAddr");
+
+            String like = String.format("%s/v1/api/item/%s/like/%s", managerurl, userid, ad.getId());
+            String hate = String.format("%s/v1/api/item/%s/hate/%s", managerurl, userid, ad.getId());
+
+            Email body = Email.builder().email_addr(email).hateLink(hate).likeLink(like).itemLink(ad.getItemLink()).itemCategory(ad.getCategoryKo()).itemName(ad.getName()).itemPrice(ad.getPrice()).imgLink(ad.getImgLink()).build();
+
+            ResponseEntity<String> resp = client.sendMailApp(body);
+
+            if (resp.getStatusCodeValue() % 100 == 2 || resp.getStatusCodeValue() % 100 == 3) {
                 log.info("[consumer] success request to LogicApp");
             }
-            
         });
-    	
-  
     }
 }

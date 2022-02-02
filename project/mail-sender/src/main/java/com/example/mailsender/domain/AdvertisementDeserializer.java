@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
-public class EmailDeserializer implements Deserializer<Email> {
+public class AdvertisementDeserializer implements Deserializer<Advertisement> {
 
     private final ObjectMapper objMapper = new ObjectMapper();
 
@@ -19,17 +19,17 @@ public class EmailDeserializer implements Deserializer<Email> {
     }
 
     @Override
-    public Email deserialize(String topic, byte[] data) {
+    public Advertisement deserialize(String topic, byte[] data) {
         try {
             if (data == null) {
-                log.warn("EmailDeSerializer get null data with topic={}", topic);
+                log.warn("AdvertisementDeSerializer get null data with topic={}", topic);
                 return null;
             }
             log.info("data " + new String(data, StandardCharsets.UTF_8));
-            return objMapper.readValue(new String(data, StandardCharsets.UTF_8), Email.class);
+            return objMapper.readValue(new String(data, StandardCharsets.UTF_8), Advertisement.class);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new SerializationException("EmailDeSerializer fail to deserializing byte array to Email");
+            throw new SerializationException("AdvertisementDeSerializer fail to deserializing byte array to Advertisement");
         }
     }
 }
