@@ -20,7 +20,6 @@ public class UserItemController extends AbstractV1UserController {
     @GetMapping("/item/{userId}/like")
     public ResponseEntity<Mono<ItemListVO>> getLikeItem(@PathVariable("userId") String userId) {
         Mono<ItemListVO> likeItem = userItemService.getLikeItem(userId);
-
         return new ResponseEntity<>(likeItem, HttpStatus.OK);
     }
 

@@ -75,23 +75,24 @@ if __name__ == '__main__':
     azure_table_client = azure_table_service.create_table_if_not_exists("advertisement")
     azure_table_client = azure_table_service.get_table_client("advertisement")
 
-    for category in CATEGORY_EN:
-        print(f"start get element {category}")
+    for category_en, category_ko in zip(CATEGORY_EN, CATEGORY_KO):
+        print(f"start get element {category_en}")
         entity = TableEntity()
         bestCategory = WebDriverWait(browser, 10).until(
-            EC.presence_of_element_located((By.XPATH, f"//*[@id=\"{prefix + category}\"]/dl/dd[3]/ul")))
+            EC.presence_of_element_located((By.XPATH, f"//*[@id=\"{prefix + category_en}\"]/dl/dd[3]/ul")))
         prod_list = bestCategory.find_elements(By.TAG_NAME, "li")
         random_num = random.randint(1, len(prod_list))
         item_info = WebDriverWait(browser, 5).until(EC.presence_of_element_located(
-            (By.XPATH, f"//*[@id=\"{prefix + category}\"]/dl/dd[3]/ul/li[{random_num}]/a")))
-        entity['PartitionKey'] = str(uuid.uuid4()).replace("-", "")
+            (By.XPATH, f"//*[@id=\"{prefix + category_en}\"]/dl/dd[3]/ul/li[{random_num}]/a")))
+        entity['PartitionKey'] = "Advertisement"
         entity['RowKey'] = str(uuid.uuid4()).replace("-", "")
-        entity['ProdLink'] = item_info.get_attribute("href")
+        entity['ItemLink'] = item_info.get_attribute("href")
         entity['ImgLink'] = item_info.find_element(By.TAG_NAME, "img").get_attribute("src")
         entity['Name'] = item_info.find_element(By.CLASS_NAME, "name").get_attribute('textContent')
-        entity['Price'] = item_info.find_element(By.CLASS_NAME, "price").find_element(By.TAG_NAME,
-                                                                                      "strong").get_attribute(
-            'textContent')
+        entity['Price'] = item_info.find_element(By.CLASS_NAME, "price").find_element(By.TAG_NAME, "strong").get_attribute('textContent')
+        entity['CategoryEn'] = category_en
+        entity['CategoryKo'] = category_ko
+
         azure_table_client.create_entity(entity=entity)
 
     browser.quit()
