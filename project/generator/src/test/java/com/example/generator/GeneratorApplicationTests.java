@@ -17,6 +17,5 @@ class GeneratorApplicationTests {
 
 	@Test
 	void kafka_test() {
-		scheduler.schedule();
 	}
 }

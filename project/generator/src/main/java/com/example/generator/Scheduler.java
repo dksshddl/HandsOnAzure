@@ -37,7 +37,7 @@ public class Scheduler {
         String itemLink = (String) entity.getProperty("ItemLink");
         String imgLink = (String) entity.getProperty("ImgLink");
         String name = (String) entity.getProperty("Name");
-        String price = (String) entity.getProperty("Pdockrice");
+        String price = (String) entity.getProperty("Price");
         String categoryEn = (String) entity.getProperty("CategoryEn");
         String categoryKo = (String) entity.getProperty("CategoryKo");
         log.info("\nItem info\n" +

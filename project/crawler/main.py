@@ -30,7 +30,7 @@ def get_azure_table_service_from_conn_str(conn_str=None):
     return TableServiceClient.from_connection_string(conn_str=conn_str)
 
 
-def get_chrome_browser(service=None, options=None):
+def get_chrome_browser(executable_path=None, options=None):
     driver_dir = "chromedriver"
     platform = sys.platform
 
@@ -43,6 +43,7 @@ def get_chrome_browser(service=None, options=None):
 
     if options is None:
         options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
         options.add_argument("no-sandbox")
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument("--disable-extensions")
@@ -52,11 +53,13 @@ def get_chrome_browser(service=None, options=None):
             'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.1072.76 Safari/537.36')
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_experimental_option('useAutomationExtension', False)
-    if service is None:
-        service = Service(os.path.join(driver_dir, driver_name))
+    if executable_path is None:
+        executable_path = os.path.join(os.getcwd(), driver_dir, driver_name)
 
-    return webdriver.Chrome(service=service, options=options)
+    return webdriver.Chrome(executable_path=executable_path, options=options)
 
+def get_current_time():
+    return time.strftime('%Y-%m-%d %I:%M:%S %p', time.localtime())
 
 if __name__ == '__main__':
 
@@ -74,9 +77,9 @@ if __name__ == '__main__':
 
     azure_table_client = azure_table_service.create_table_if_not_exists("advertisement")
     azure_table_client = azure_table_service.get_table_client("advertisement")
-
+    print(f"[{get_current_time()}] start crawling...")
     for category_en, category_ko in zip(CATEGORY_EN, CATEGORY_KO):
-        print(f"start get element {category_en}")
+        print(f" - get item with category : [{category_en}]")
         entity = TableEntity()
         bestCategory = WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.XPATH, f"//*[@id=\"{prefix + category_en}\"]/dl/dd[3]/ul")))
@@ -92,7 +95,10 @@ if __name__ == '__main__':
         entity['Price'] = item_info.find_element(By.CLASS_NAME, "price").find_element(By.TAG_NAME, "strong").get_attribute('textContent')
         entity['CategoryEn'] = category_en
         entity['CategoryKo'] = category_ko
-
+        print(f"   > save item to azure storage...")
         azure_table_client.create_entity(entity=entity)
+        print(f"   > success to save item to azure storage ( Item Id : [{entity['RowKey']}] )")
+
+    print(f"[{get_current_time()}] finish crawling... quit browser")
 
     browser.quit()
