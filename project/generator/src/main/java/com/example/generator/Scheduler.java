@@ -30,7 +30,9 @@ public class Scheduler {
         String filter = String.format("%s eq 'Advertisement'", PARTITION_KEY);
         ListEntitiesOptions options = new ListEntitiesOptions().setFilter(filter);
         List<TableEntity> entities = tableClient.listEntities(options, null, null).stream().collect(Collectors.toList());
-        int randomIdx = new Random().nextInt(entities.size());
+	Random rand = new Random();
+	rand.setSeed(System.currentTimeMillis());
+        int randomIdx = rand.nextInt(entities.size());
         TableEntity entity = entities.get(randomIdx);
 
         String id = (String) entity.getProperty("RowKey");
