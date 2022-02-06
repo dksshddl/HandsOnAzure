@@ -51,7 +51,18 @@ public class UserItemRepository {
                 .stream().map((entity)-> {
                     String enItemId = (String) entity.getProperty("ItemId");
                     String enUserId = (String) entity.getProperty("UserId");
-                    return ItemVO.builder().itemId(enItemId).userId(enUserId).build();
+                    ItemType enItemType = ItemType.valueOf((String) entity.getProperty("PartitionKey"));
+                    return ItemVO.builder().itemId(enItemId).userId(enUserId).itemType(enItemType).build();
                 }).collect(Collectors.toList());
+    }
+
+    public ItemVO findByItemId(String userId, String itemId) {
+        String filter = String.format("UserId eq '%s'", userId);
+        ListEntitiesOptions options = new ListEntitiesOptions().setFilter(filter);
+        TableEntity entity = tableClient.listEntities(options, null, null).stream().findAny().orElseThrow();
+        String enItemId = (String) entity.getProperty("ItemId");
+        String enUserId = (String) entity.getProperty("UserId");
+        ItemType enItemType = ItemType.valueOf((String) entity.getProperty("PartitionKey"));
+        return ItemVO.builder().itemId(enItemId).userId(enUserId).itemType(enItemType).build();
     }
 }

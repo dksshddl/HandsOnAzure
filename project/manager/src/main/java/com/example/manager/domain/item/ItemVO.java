@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ItemVO {
     private String userId;
     private String itemId;
+    private ItemType itemType;
 }
