@@ -3,7 +3,10 @@ import random
 import sys
 import os
 import time
+import requests
+
 from azure.data.tables import TableEntity
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -29,6 +32,10 @@ def get_azure_table_service_from_conn_str(conn_str=None):
         conn_str = "DefaultEndpointsProtocol=https;AccountName=adgenstorage;AccountKey=u2o5cMTKQIYQewqDFe/H52ovGJhz3KdGpP0ET70Zn1ky1ozreGJoBA6w30C6k8q+QPeJNEpKpmJmfrWWJKIFPg==;EndpointSuffix=core.windows.net"
     return TableServiceClient.from_connection_string(conn_str=conn_str)
 
+def get_azure_blob_service_from_conn_str(conn_str=None):
+    if conn_str is None:
+        conn_str = "DefaultEndpointsProtocol=https;AccountName=adgenstorage;AccountKey=u2o5cMTKQIYQewqDFe/H52ovGJhz3KdGpP0ET70Zn1ky1ozreGJoBA6w30C6k8q+QPeJNEpKpmJmfrWWJKIFPg==;EndpointSuffix=core.windows.net"
+    return BlobServiceClient.from_connection_string(conn_str)
 
 def get_chrome_browser(executable_path=None, options=None):
     driver_dir = "chromedriver"
@@ -61,12 +68,17 @@ def get_chrome_browser(executable_path=None, options=None):
 def get_current_time():
     return time.strftime('%Y-%m-%d %I:%M:%S %p', time.localtime())
 
+def insert_into_blob(path : str, container_client : ContainerClient):
+    container_client.create_container
+
 if __name__ == '__main__':
 
     browser = get_chrome_browser()
     browser.get(url=URL)
 
     azure_table_service = get_azure_table_service_from_conn_str()
+    azure_blob_service = get_azure_blob_service_from_conn_str()
+    azure_container_client = azure_blob_service.get_container_client("advertisement")
 
     bestUnit = WebDriverWait(browser, 5).until(
         EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/section[2]/div[9]')))
@@ -90,11 +102,16 @@ if __name__ == '__main__':
         entity['PartitionKey'] = "Advertisement"
         entity['RowKey'] = str(uuid.uuid4()).replace("-", "")
         entity['ItemLink'] = item_info.get_attribute("href")
-        entity['ImgLink'] = item_info.find_element(By.TAG_NAME, "img").get_attribute("src")
         entity['Name'] = item_info.find_element(By.CLASS_NAME, "name").get_attribute('textContent')
         entity['Price'] = item_info.find_element(By.CLASS_NAME, "price").find_element(By.TAG_NAME, "strong").get_attribute('textContent')
         entity['CategoryEn'] = category_en
         entity['CategoryKo'] = category_ko
+        entity['ImgLink'] = "https://adgenstorage.blob.core.windows.net/advertisement/"+entity['RowKey']+".jpg"
+
+        image_link = item_info.find_element(By.TAG_NAME, "img").get_attribute("src")
+        r = requests.get(image_link, allow_redirects=True)
+        azure_container_client.upload_blob(name=entity['RowKey']+".jpg", data=r.content)
+
         print(f"   > save item to azure storage...")
         azure_table_client.create_entity(entity=entity)
         print(f"   > success to save item to azure storage ( Item Id : [{entity['RowKey']}] )")
