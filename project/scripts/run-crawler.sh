@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd crawler
+cd crawler || exit
 source .venv/bin/activate
 python3 main.py
