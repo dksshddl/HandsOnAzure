@@ -30,8 +30,8 @@ public class Scheduler {
         String filter = String.format("%s eq 'Advertisement'", PARTITION_KEY);
         ListEntitiesOptions options = new ListEntitiesOptions().setFilter(filter);
         List<TableEntity> entities = tableClient.listEntities(options, null, null).stream().collect(Collectors.toList());
-	Random rand = new Random();
-	rand.setSeed(System.currentTimeMillis());
+        Random rand = new Random();
+        rand.setSeed(System.currentTimeMillis());
         int randomIdx = rand.nextInt(entities.size());
         TableEntity entity = entities.get(randomIdx);
 
@@ -51,26 +51,5 @@ public class Scheduler {
                 "  category: {}", id, itemLink, imgLink, name, price, categoryKo);
         Advertisement ad = Advertisement.builder().id(id).itemLink(itemLink).imgLink(imgLink).name(name).price(price).categoryEn(categoryEn).categoryKo(categoryKo).build();
         kafkaService.insert(ad);
-        
-        // send all ad
-        // List<Advertisement> advertisements = tableClient.listEntities(options, null, null).stream().map((entity) -> {
-        //     String id = (String) entity.getProperty("RowKey");
-        //     String itemLink = (String) entity.getProperty("ItemLink");
-        //     String imgLink = (String) entity.getProperty("ImgLink");
-        //     String name = (String) entity.getProperty("Name");
-        //     String price = (String) entity.getProperty("Pdockrice");
-        //     String categoryEn = (String) entity.getProperty("CategoryEn");
-        //     String categoryKo = (String) entity.getProperty("CategoryKo");
-        //     log.info("\nItem info\n" +
-        //             "  itemId: {}\n" +
-        //             "  itemLink: {}\n" +
-        //             "  imgLink: {}\n" +
-        //             "  name: {}\n" +
-        //             "  price: {}\n" +
-        //             "  category: {}", id, itemLink, imgLink, name, price, categoryKo);
-        //     return Advertisement.builder().id(id).itemLink(itemLink).imgLink(imgLink).name(name).price(price).categoryEn(categoryEn).categoryKo(categoryKo).build();
-        // }).collect(Collectors.toList());
-
-        // advertisements.forEach((kafkaService::insert));
     }
 }

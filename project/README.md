@@ -20,27 +20,42 @@ details on each application:
 - jdk11 (+gradle, maven)
 - python3.8
 - docker, docker-compose
-> $./scripts/prerequisites.sh
+
+```
+$./scripts/prerequisites.sh
+```
 ### 2. 빌드
 maven/gradle build, docker build, python venv setting
-> $./scripts/build.sh
+```
+$./scripts/build.sh
+```
 ### 3. 광고 저장하기 (Optional)
 crawling advertisement (coupang)
-> $./scripts/run-crawler.sh
+```
+$./scripts/run-crawler.sh
+```
 ### 4. 시작하기
-> docker-compose up -d
->
+```
+docker-compose up -d
+```
 or (equals)
-> $./scripts/docker-compose-up.sh
+```
+$./scripts/docker-compose-up.sh
+```
 
 ### 5. 중지하기
-> docker-compose down
->
+```
+docker-compose down
+```
+
 or (equals)
-> $./scripts/docker-compose-down.sh
-> 
+```
+$./scripts/docker-compose-down.sh
+```
 
 ### 6. 확인하기
-> $ docker ps
+```
+$ docker ps
+```
 
 ![docker ps](./images/docker.jpg)
