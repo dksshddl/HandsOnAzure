@@ -54,8 +54,14 @@ $./scripts/docker-compose-down.sh
 ```
 
 ### 6. 확인하기
+#### 6.1 docker container 확인
 ```
 $ docker ps
 ```
-
 ![docker ps](./images/docker.jpg)
+
+#### 6.2 docker container 로그 확인
+```
+$ docker logs [option] [container]
+```
+![docker log](./images/docker%20log.jpg)
