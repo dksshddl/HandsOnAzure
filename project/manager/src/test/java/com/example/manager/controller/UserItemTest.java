@@ -32,7 +32,7 @@ public class UserItemTest {
     }
 
     void add_like_test() {
-        ResponseEntity<Object> resp = userItemController.addLikeItem("dksshddl", "addLikeTest");
+        ResponseEntity<Mono<Object>> resp = userItemController.addLikeItem("dksshddl", "addLikeTest");
         Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class UserItemTest {
 
 
     void add_hate_test() {
-        ResponseEntity<Object> resp = userItemController.addHateItem("dksshddl", "addHateTest");
+        ResponseEntity<Mono<Object>> resp = userItemController.addHateItem("dksshddl", "addHateTest");
         Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

@@ -6,7 +6,6 @@ import com.example.manager.domain.item.ItemVO;
 import com.example.manager.repository.UserItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -16,12 +15,14 @@ public class UserItemService {
 
     private final UserItemRepository userItemRepository;
 
-    public void addLikeItem(String userId, String iteminfo) {
+    public boolean addLikeItem(String userId, String iteminfo) {
         userItemRepository.insert(userId, iteminfo, ItemType.LIKE);
+	return true;
     }
 
-    public void addHateItem(String userId, String iteminfo) {
+    public boolean addHateItem(String userId, String iteminfo) {
         userItemRepository.insert(userId, iteminfo, ItemType.HATE);
+	return true;
     }
 
     public void deleteLikeItem(String userId, String itemId) {
@@ -32,17 +33,13 @@ public class UserItemService {
         userItemRepository.delete(userId, itemId, ItemType.HATE);
     }
 
-    public Mono<ItemListVO> getLikeItem(String userId) {
-        return Mono.fromCallable(() -> {
+    public ItemListVO getLikeItem(String userId) {
             List<ItemVO> itemVOList = userItemRepository.findAll(userId, ItemType.LIKE);
             return ItemListVO.builder().itemVOList(itemVOList).count(itemVOList.size()).build();
-        });
     }
 
-    public Mono<ItemListVO> getHateItem(String userId) {
-        return Mono.fromCallable(() -> {
+    public ItemListVO getHateItem(String userId) {
             List<ItemVO> itemVOList = userItemRepository.findAll(userId, ItemType.LIKE);
             return ItemListVO.builder().itemVOList(itemVOList).count(itemVOList.size()).build();
-        });
     }
 }

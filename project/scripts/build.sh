@@ -3,7 +3,7 @@
 # build manager
 cd manager || exit
 chmod +x gradlew
-sudo ./gradlew build
+sudo ./gradlew build --exclude-task test
 docker build -t manager:latest .
 cd ..
 
