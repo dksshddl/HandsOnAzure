@@ -23,7 +23,7 @@ public class UserItemController extends AbstractV1UserController {
         return new ResponseEntity<>(likeItem, HttpStatus.OK);
     }
 
-    @PostMapping("/item/{userId}/like/{itemId}")
+    @GetMapping("/item/{userId}/like/{itemId}")
     public ResponseEntity<Object> addLikeItem(@PathVariable("userId") String userId,
                                         @PathVariable("itemId") String itemId) {
         userItemService.addLikeItem(userId, itemId);
@@ -44,7 +44,7 @@ public class UserItemController extends AbstractV1UserController {
         return new ResponseEntity<>(hateItem, HttpStatus.OK);
     }
 
-    @PostMapping("/item/{userId}/hate/{itemId}")
+    @GetMapping("/item/{userId}/hate/{itemId}")
     public ResponseEntity<Object> addHateItem(@PathVariable("userId") String userId,
                                               @PathVariable("itemId") String itemId) {
         userItemService.addHateItem(userId, itemId);
